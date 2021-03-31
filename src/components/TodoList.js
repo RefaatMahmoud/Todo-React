@@ -1,11 +1,11 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useCallback} from "react";
 import Todo from "./Todo";
 
 const TodoList = ({todoItems,setTodoItems,filterSelect}) => {
 
     const [filteredTodos,setFilteredTodos] = useState([])
 
-    const filteredTodosHandler = () => {
+    const filteredTodosHandler = useCallback(()=>{
         switch (filterSelect){
             case 'completed':
                 setFilteredTodos(todoItems.filter((todo) => todo.completed === true))
@@ -17,12 +17,12 @@ const TodoList = ({todoItems,setTodoItems,filterSelect}) => {
                 setFilteredTodos(todoItems)
                 break;
         }
-    }
+    },[todoItems,filterSelect])
 
-    //Run hook when todoItems or filterSelect changed ..
+    //Run hook when [todoItems, filterSelect, filteredTodosHandler] filterSelect changed ..
     useEffect(function (){
          filteredTodosHandler()
-    },[todoItems,filterSelect])
+    },[todoItems, filterSelect, filteredTodosHandler])
 
     return (
         <div className="todo-container">

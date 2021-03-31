@@ -1,4 +1,4 @@
-import {useState,useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import './App.css';
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
@@ -6,24 +6,28 @@ import TodoList from "./components/TodoList";
 function App() {
     const [inputText, setInputText] = useState('')
     const [todoItems, setTodoItems] = useState([]);
-    const [filterSelect,setFilterSelect] = useState('all')
+    const [filterSelect, setFilterSelect] = useState('all')
 
     const saveTodosLocalStorage = () => {
-        localStorage.setItem('todos',JSON.stringify(todoItems))
+        localStorage.setItem('todos', JSON.stringify(todoItems))
     }
 
     const getTodosLocalStorage = () => {
-        const todos = JSON.parse(localStorage.getItem('todos'))
-        setTodoItems(todos)
+        if (localStorage.getItem('todos') === null) {
+            localStorage.setItem('todos',JSON.stringify([]))
+        }else{
+            const todos = JSON.parse(localStorage.getItem('todos'))
+            setTodoItems(todos)
+        }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getTodosLocalStorage()
-    },[])
+    }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         saveTodosLocalStorage()
-    },[todoItems])
+    }, [todoItems])
 
     return (
         <div className="App">
