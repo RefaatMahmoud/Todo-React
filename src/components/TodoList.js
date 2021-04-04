@@ -1,33 +1,36 @@
-import React,{useState,useEffect,useCallback} from "react";
+import React, {useEffect, useCallback} from "react";
 import Todo from "./Todo";
+import {TODO_STATUS_ENUM} from "../constants/Todo";
+import {useSelector} from "react-redux";
 
-const TodoList = ({todoItems,setTodoItems,filterSelect}) => {
+const TodoList = ({filterSelect}) => {
+    let todos = useSelector(state => state.todos);
+    let filteredTodos = [];
 
-    const [filteredTodos,setFilteredTodos] = useState([])
-
-    const filteredTodosHandler = useCallback(()=>{
-        switch (filterSelect){
-            case 'completed':
-                setFilteredTodos(todoItems.filter((todo) => todo.completed === true))
+    const filteredTodosHandler = useCallback(() => {
+        switch (filterSelect) {
+            case TODO_STATUS_ENUM.COMPLETED:
+                filteredTodos = todos.filter((todo) => todo.completed === true)
                 break;
-            case 'uncompleted':
-                setFilteredTodos(todoItems.filter((todo) => todo.completed === false))
+            case TODO_STATUS_ENUM.INCOMPLETE:
+                filteredTodos = todos.filter((todo) => todo.completed === false)
                 break;
             default:
-                setFilteredTodos(todoItems)
+                filteredTodos = [...todos]
                 break;
         }
-    },[todoItems,filterSelect])
+        return filteredTodos
+    },[filterSelect,filteredTodos])
 
-    //Run hook when [todoItems, filterSelect, filteredTodosHandler] filterSelect changed ..
-    useEffect(function (){
-         filteredTodosHandler()
-    },[todoItems, filterSelect, filteredTodosHandler])
+    //Run hook when [filterSelect, filteredTodosHandler] filterSelect changed ..
+    useEffect(function () {
+        filteredTodosHandler()
+    }, [filterSelect, filteredTodosHandler])
 
     return (
         <div className="todo-container">
             <ul className="todo-list">
-                {filteredTodos.map((todo,index) => <Todo todoItems={todoItems} setTodoItems={setTodoItems} key={index} todo={todo}/>)}
+                {filteredTodosHandler().map((todo, index) => <Todo key={index} todo={todo}/>)}
             </ul>
         </div>
     )

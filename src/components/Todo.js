@@ -1,27 +1,16 @@
 import React from "react";
+import {useDispatch} from "react-redux";
+import {DELETE_TODO, TOGGLE_TODO_STATUS} from '../actions/TodosActions'
 
-const Todo = ({todo,todoItems,setTodoItems}) => {
-
-    const deleteTodoHandler = () => {
-        setTodoItems(todoItems.filter((el) => el.id !== todo.id))
-    }
-
-    const completeTodoHandler = () => {
-        setTodoItems(todoItems.map((item) => {
-            if (item.id === todo.id){
-                item.completed = !item.completed
-            }
-            return item;
-        }))
-    }
-
+const Todo = ({todo}) => {
+    const dispatch = useDispatch();
     return (
         <div className="todo">
             <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>{todo.text}</li>
-            <button className='complete-btn' onClick={completeTodoHandler}>
+            <button className='complete-btn' onClick={() => dispatch(TOGGLE_TODO_STATUS(todo.id))}>
                 <i className='fas fa-check'></i>
             </button>
-            <button className='trash-btn' onClick={deleteTodoHandler}>
+            <button className='trash-btn' onClick={() => dispatch(DELETE_TODO(todo.id))}>
                 <i className='fas fa-trash'></i>
             </button>
         </div>
