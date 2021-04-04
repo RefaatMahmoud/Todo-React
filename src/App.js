@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect,useCallback} from 'react';
 import './App.css';
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
@@ -8,9 +8,9 @@ function App() {
     const [todoItems, setTodoItems] = useState([]);
     const [filterSelect, setFilterSelect] = useState('all')
 
-    const saveTodosLocalStorage = () => {
+    const saveTodosLocalStorage = useCallback(()=>{
         localStorage.setItem('todos', JSON.stringify(todoItems))
-    }
+    },[todoItems])
 
     const getTodosLocalStorage = () => {
         if (localStorage.getItem('todos') === null) {
@@ -27,7 +27,7 @@ function App() {
 
     useEffect(() => {
         saveTodosLocalStorage()
-    }, [todoItems])
+    }, [todoItems,saveTodosLocalStorage])
 
     return (
         <div className="App">
