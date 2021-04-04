@@ -1,3 +1,4 @@
 # Todo React App
 
-simpel react todo app with filter and save todos in local storage
+`master` branch : simpel react todo app with filter and save todos in local storage
+`redux` branch : apply redux in todos with filter 
